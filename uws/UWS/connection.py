@@ -3,6 +3,8 @@ import httplib
 import urllib
 import urllib2
 import base64
+import mimetypes
+import re
 
 from urlparse import urlparse
 
@@ -83,14 +85,35 @@ class Connection(object):
         return response
 
     def post(self, path, args):
-        params = urllib.urlencode(args)
+        # prepare multipart/form-data request
+        limit = '--------UWS_Client_Separator'
+        crlf = '\r\n'
+        params_list = []
+        for key in args:
+            params_list.append('--' + limit)
+            if re.match('^@', args[key]):
+                dummy = 'Content-Disposition: form-data; '
+                dummy += 'name="%s"; filename="%s"' % (key, args[key][1:])
+                params_list.append(dummy)
+                dummy = 'Content-Type: '
+                dummy += (mimetypes.guess_type(args[key])[0] or 'application/octet-stream')
+                params_list.append(dummy)
+                params_list.append('')
+                params_list.append(open(args[key][1:]).read())
+            else:
+                params_list.append('Content-Disposition: form-data; name="%s"'%key)
+                params_list.append('')
+                params_list.append(args[key])
+        params_list.append('--' + limit + '--')
+        params_list.append('')
+        params = crlf.join(params_list)
 
         if path:
             destination_url = self.base_path + "/" + path
         else:
             destination_url = self.base_path
 
-        self.headers['Content-type'] = "application/x-www-form-urlencoded"
+        self.headers['Content-type'] = "multipart/form-data; boundary=%s"%limit
         self.connection.request("POST", destination_url, body=params, headers=self.headers)
         response = self.connection.getresponse()
         response.read()  # read body of request so we can send another
