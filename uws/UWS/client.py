@@ -145,7 +145,7 @@ class Client(object):
             raise UWSError(str(e))
 
         raw = response.read()
-        result = raw
+        result = str(raw, 'utf-8')
 
         return result
 
