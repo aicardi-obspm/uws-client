@@ -15,8 +15,8 @@ version = "1.1.11"
 setup(
     name='uws-client',
     version=version,
-    url='http://github.com/aipescience/uws-client/',
-    download_url='http://github.com/aipescience/uws-client/archive/%s.tar.gz' % version,
+    url='http://github.com/aicardi-obspm/uws-client/',
+    download_url='http://github.com/aicardi-obspm/uws-client/archive/%s.tar.gz' % version,
     packages=find_packages(),
     license=u'Apache License (2.0)',
     author=u'Adrian M. Partl',
@@ -24,7 +24,7 @@ setup(
     maintainer=u'AIP E-Science',
     maintainer_email=u'escience@aip.de',
     description=u'A command line client for IVOA UWS services, plus models for development',
-    long_description='This is a client for IVOA Virtual Observatroy UWS services. It can be used to access UWS services directly or through Basic Authentication. Please visit https://github.com/aipescience/uws-client/blob/master/README.md for how to use the software.',
+    long_description='This is a client for IVOA Virtual Observatroy UWS services. It can be used to access UWS services directly or through Basic Authentication. Please visit https://github.com/aicardi-obspm/uws-client/blob/master/README.md for how to use the software.',
     include_package_data=True,
     install_requires=install_requires,
     entry_points={
