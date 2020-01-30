@@ -91,7 +91,7 @@ class Jobs(BaseUWSModel):
             if isinstance(xml, bytes):
                 parsed = et.fromstring(xml.decode())
             else:
-                parsed = et.fromstring(xml)
+                parsed = et.fromstring(xml.encode('utf-8'))
 
             uws_flavour = UWS1Flavour(parsed.nsmap)
 
