@@ -88,7 +88,10 @@ class Jobs(BaseUWSModel):
 
         if xml is not None:
             # parse xml
-            parsed = et.fromstring(xml.decode())
+            if isinstance(xml, bytes):
+                parsed = et.fromstring(xml.decode())
+            else:
+                parsed = et.fromstring(xml)
 
             uws_flavour = UWS1Flavour(parsed.nsmap)
 
