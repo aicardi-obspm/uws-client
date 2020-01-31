@@ -45,35 +45,35 @@ class JobListTest(unittest.TestCase):
         self.assertEqual(str(job_list), job_list_str)
 
         job1 = job_list.job_reference[0]
-        self.assertEqual(job1.id, '2014-06-03T15:33:29:4235')
+        self.assertEqual(job1.jid, '2014-06-03T15:33:29:4235')
         self.assertEqual(job1.phase, ['COMPLETED'])
         self.assertEqual(job1.reference.type, "simple")
         self.assertEqual(job1.reference.href,
                          "https://www.cosmosim.org/uws/query/335912448787925")
 
         job2 = job_list.job_reference[1]
-        self.assertEqual(job2.id, '2014-06-02T10:14:25:1677')
+        self.assertEqual(job2.jid, '2014-06-02T10:14:25:1677')
         self.assertEqual(job2.phase, ['ABORTED'])
         self.assertEqual(job2.reference.type, "simple")
         self.assertEqual(job2.reference.href,
                          "https://www.cosmosim.org/uws/query/308893189727250")
 
         job3 = job_list.job_reference[2]
-        self.assertEqual(job3.id, '2014-05-28T10:46:39:2755')
+        self.assertEqual(job3.jid, '2014-05-28T10:46:39:2755')
         self.assertEqual(job3.phase, ['COMPLETED'])
         self.assertEqual(job3.reference.type, "simple")
         self.assertEqual(job3.reference.href,
                          "https://www.cosmosim.org/uws/query/198796714554760")
 
         job4 = job_list.job_reference[3]
-        self.assertEqual(job4.id, '2014-05-09T15:13:50:6896')
+        self.assertEqual(job4.jid, '2014-05-09T15:13:50:6896')
         self.assertEqual(job4.phase, ['ERROR'])
         self.assertEqual(job4.reference.type, "simple")
         self.assertEqual(job4.reference.href,
                          "https://www.cosmosim.org/uws/query/1177277256137938")
 
         job5 = job_list.job_reference[4]
-        self.assertEqual(job5.id, u'rndSamp2')
+        self.assertEqual(job5.jid, u'rndSamp2')
         self.assertEqual(job5.phase, ['COMPLETED'])
         self.assertEqual(job5.reference.type, "simple")
         self.assertEqual(job5.reference.href,
@@ -168,19 +168,19 @@ ORDER BY log_mass
 
         # check parameters
         param = job.parameters[0]
-        self.assertEqual(param.id, 'database')
+        self.assertEqual(param.pid, 'database')
         self.assertEqual(param.by_reference, False)
         self.assertEqual(param.is_post, False)
         self.assertEqual(param.value, 'cosmosim_user_adrian')
 
         param = job.parameters[1]
-        self.assertEqual(param.id, 'table')
+        self.assertEqual(param.pid, 'table')
         self.assertEqual(param.by_reference, False)
         self.assertEqual(param.is_post, False)
         self.assertEqual(param.value, '2014-06-03T15:33:29:4235')
 
         param = job.parameters[2]
-        self.assertEqual(param.id, 'query')
+        self.assertEqual(param.pid, 'query')
         self.assertEqual(param.by_reference, False)
         self.assertEqual(param.is_post, False)
         query_value = ("SELECT 0.25*(0.5+FLOOR(LOG10(Mvir)/0.25)) AS log_mass, COUNT(*) AS num\r\n"
@@ -198,34 +198,34 @@ ORDER BY log_mass
         self.assertEqual(param.value, query_value)
 
         param = job.parameters[3]
-        self.assertEqual(param.id, 'queue')
+        self.assertEqual(param.pid, 'queue')
         self.assertEqual(param.by_reference, False)
         self.assertEqual(param.is_post, False)
         self.assertEqual(param.value, 'short')
 
         # check results
         result = job.results[0]
-        self.assertEqual(result.id, 'csv')
+        self.assertEqual(result.rid, 'csv')
         self.assertEqual(result.reference.type, 'simple')
         self.assertEqual(result.reference.href, ('https://www.cosmosim.org/query/download/stream/'
                                                  'table/2014-06-03T15%3A33%3A29%3A4235/format/csv'))
 
         result = job.results[1]
-        self.assertEqual(result.id, 'votable.xml')
+        self.assertEqual(result.rid, 'votable.xml')
         self.assertEqual(result.reference.type, 'simple')
         self.assertEqual(result.reference.href, ('https://www.cosmosim.org/query/download/stream/'
                                                  'table/2014-06-03T15%3A33%3A29%3A4235/'
                                                  'format/votable'))
 
         result = job.results[2]
-        self.assertEqual(result.id, 'votableB1.xml')
+        self.assertEqual(result.rid, 'votableB1.xml')
         self.assertEqual(result.reference.type, 'simple')
         self.assertEqual(result.reference.href, ('https://www.cosmosim.org/query/download/stream/'
                                                  'table/2014-06-03T15%3A33%3A29%3A4235/format/'
                                                  'votableB1'))
 
         result = job.results[3]
-        self.assertEqual(result.id, 'votableB2.xml')
+        self.assertEqual(result.rid, 'votableB2.xml')
         self.assertEqual(result.reference.type, 'simple')
         self.assertEqual(result.reference.href, ('https://www.cosmosim.org/query/download/stream/'
                                                  'table/2014-06-03T15%3A33%3A29%3A4235/format/'
@@ -300,19 +300,19 @@ class AbortedJobTest(unittest.TestCase):
 
         # check parameters
         param = job.parameters[0]
-        self.assertEqual(param.id, 'database')
+        self.assertEqual(param.pid, 'database')
         self.assertEqual(param.by_reference, False)
         self.assertEqual(param.is_post, False)
         self.assertEqual(param.value, 'cosmosim_user_adrian')
 
         param = job.parameters[1]
-        self.assertEqual(param.id, 'table')
+        self.assertEqual(param.pid, 'table')
         self.assertEqual(param.by_reference, False)
         self.assertEqual(param.is_post, False)
         self.assertEqual(param.value, '2014-06-02T10:14:25:1677')
 
         param = job.parameters[2]
-        self.assertEqual(param.id, 'query')
+        self.assertEqual(param.pid, 'query')
         self.assertEqual(param.by_reference, False)
         self.assertEqual(param.is_post, False)
         query_value = ("select count(*) from MDR1.Particles85 where x < 1\n-- The query plan used "
@@ -326,7 +326,7 @@ class AbortedJobTest(unittest.TestCase):
         self.assertEqual(param.value, query_value)
 
         param = job.parameters[3]
-        self.assertEqual(param.id, 'queue')
+        self.assertEqual(param.pid, 'queue')
         self.assertEqual(param.by_reference, False)
         self.assertEqual(param.is_post, False)
         self.assertEqual(param.value, 'short')
@@ -406,19 +406,19 @@ class ErroredJobTest(unittest.TestCase):
 
         # check parameters
         param = job.parameters[0]
-        self.assertEqual(param.id, 'database')
+        self.assertEqual(param.pid, 'database')
         self.assertEqual(param.by_reference, False)
         self.assertEqual(param.is_post, False)
         self.assertEqual(param.value, 'cosmosim_user_adrian')
 
         param = job.parameters[1]
-        self.assertEqual(param.id, 'table')
+        self.assertEqual(param.pid, 'table')
         self.assertEqual(param.by_reference, False)
         self.assertEqual(param.is_post, False)
         self.assertEqual(param.value, '2014-05-09T15:13:50:6896')
 
         param = job.parameters[2]
-        self.assertEqual(param.id, 'query')
+        self.assertEqual(param.pid, 'query')
         self.assertEqual(param.by_reference, False)
         self.assertEqual(param.is_post, False)
         query_value = ("select avg(x) from `MDPL`.`Particles88tmp`;\n-- The query plan used to "
@@ -433,7 +433,7 @@ class ErroredJobTest(unittest.TestCase):
         self.assertEqual(param.value, query_value)
 
         param = job.parameters[3]
-        self.assertEqual(param.id, 'queue')
+        self.assertEqual(param.pid, 'queue')
         self.assertEqual(param.by_reference, False)
         self.assertEqual(param.is_post, False)
         self.assertEqual(param.value, 'short')
@@ -470,7 +470,7 @@ class JobListNamespaceTest(unittest.TestCase):
         self.assertEqual(str(job_list), job_list_str)
 
         job1 = job_list.job_reference[0]
-        self.assertEqual(job1.id, '335912448787925')
+        self.assertEqual(job1.jid, '335912448787925')
         self.assertEqual(job1.phase, ['COMPLETED'])
         self.assertEqual(job1.reference.type, "simple")
         self.assertEqual(job1.reference.href, "https://www.cosmosim.org/uws/query/335912448787925")

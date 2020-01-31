@@ -8,7 +8,7 @@ import texttable as tt
 from uws import UWS
 from . import cli_parser
 
-debug = False
+DEBUG = False
 
 
 def handle_error(handler):
@@ -16,13 +16,13 @@ def handle_error(handler):
     def handle(self, *args, **kwargs):
         try:
             return handler(self, *args, **kwargs)
-        except UWS.UWSError as e:
-            if not debug:
-                print("An error occurred:\n   %s" % e.msg)
+        except UWS.UWSError as exc:
+            if not DEBUG:
+                print("An error occurred:\n   %s" % exc.msg)
                 raise
             else:
-                print("An error occurred:\n   %s" % e.msg)
-                print(e.raw)
+                print("An error occurred:\n   %s" % exc.msg)
+                print(exc.raw)
                 raise
     return handle
 
@@ -112,26 +112,26 @@ def _register_job_reference_for_table(rows, jobref):
     # only the href-id, if they differ. Because this really MUST be the
     # correct jobId.
 
-    cols = [jobref.id]
+    cols = [jobref.jid]
 
     if jobref.reference.href is not None:
         href_jobid = jobref.reference.href.rsplit("/", 1)[1]
-        if href_jobid != jobref.id:
+        if href_jobid != jobref.jid:
             # replace id with href_jobid
             cols[0] = href_jobid
 
-    if jobref.runId is not None:
-        cols.append(jobref.runId)
+    if jobref.run_id is not None:
+        cols.append(jobref.run_id)
     else:
         cols.append('')
 
-    if jobref.ownerId is not None:
-        cols.append(jobref.ownerId)
+    if jobref.owner_id is not None:
+        cols.append(jobref.owner_id)
     else:
         cols.append('')
 
-    if jobref.creationTime is not None:
-        cols.append(jobref.creationTime)
+    if jobref.creation_time is not None:
+        cols.append(jobref.creation_time)
     else:
         cols.append('')
 
@@ -249,12 +249,12 @@ def results_job(url, user_name, password, jid, result_id, user_file_base):
         print(' result like this: ')
         print('\nuws job results ID RESULTID\n')
         print('For RESULTID, you can choose from: ',
-              ','.join([result.id for result in job.results]))
+              ','.join([result.rid for result in job.results]))
 
     # set file base name to job_id or tablename (if available) or user provided file_base
     file_base = job.job_id
     for parameter in job.parameters:
-        if parameter.id == 'table':
+        if parameter.pid == 'table':
             file_base = parameter.value
             break
 
@@ -263,13 +263,13 @@ def results_job(url, user_name, password, jid, result_id, user_file_base):
 
     retrieved = False
     for result in job.results:
-        if not result_id or result_id == result.id:
+        if not result_id or result_id == result.rid:
 
-            filename = file_base + '.' + result.id
+            filename = file_base + '.' + result.rid
 
             url = str(result.reference)
 
-            print("Downloading %s into file '%s'" % (result.id, filename))
+            print("Downloading %s into file '%s'" % (result.rid, filename))
             uws_client.connection.download_file(url, user_name, password,
                                                 filename, callback=print_progress)
             print("")
@@ -310,10 +310,10 @@ def _print_job(job):
     rows.append(["Destruction time", job.destruction])
 
     for param in job.parameters:
-        rows.append(["Parameter " + param.id, param.value])
+        rows.append(["Parameter " + param.pid, param.value])
 
     for result in job.results:
-        rows.append(["Result " + result.id, result.reference])
+        rows.append(["Result " + result.rid, result.reference])
 
     try:
         if job.error_summary:
@@ -394,12 +394,12 @@ def _check_joblist_last(argument):
 
 
 def main():
-    global debug
+    global DEBUG
     parser = cli_parser.build_argparse()
     arguments = parser.parse_args()
 
     if arguments.dbg:
-        debug = True
+        DEBUG = True
 
     if arguments.P:
         if arguments.password:

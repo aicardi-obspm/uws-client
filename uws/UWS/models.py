@@ -5,38 +5,38 @@ import six
 from lxml import etree as et
 
 
-uws_1_namespace = "http://www.ivoa.net/xml/UWS/v1.0"
-#uws_2_namespace = "http://www.ivoa.net/xml/UWS/v2.0"
-xlink_namespace = "http://www.w3.org/1999/xlink"
+UWS_1_NAMESPACE = "http://www.ivoa.net/xml/UWS/v1.0"
+#UWS_2_NAMESPACE = "http://www.ivoa.net/xml/UWS/v2.0"
+XLINK_NAMESPACE = "http://www.w3.org/1999/xlink"
 
 
 class UWS1Flavour:
     def __init__(self, namespaces=None):
 
-        if uws_1_namespace not in namespaces.values():
+        if UWS_1_NAMESPACE not in namespaces.values():
             raise RuntimeError("No supported UWS namespace found in xml-response, "
                                "cannot parse xml.")
 
         # prepend each element's name with the correct uws-namespace
         # for this version
-        self.uws_namespace = uws_1_namespace
+        self.uws_namespace = UWS_1_NAMESPACE
         self.jobs = et.QName(self.uws_namespace, "jobs")
         self.jobref = et.QName(self.uws_namespace, "jobref")
         self.phase = et.QName(self.uws_namespace, "phase")
-        self.jobId = et.QName(self.uws_namespace, "jobId")
-        self.runId = et.QName(self.uws_namespace, "runId")
-        self.ownerId = et.QName(self.uws_namespace, "ownerId")
+        self.job_id = et.QName(self.uws_namespace, "jobId")
+        self.run_id = et.QName(self.uws_namespace, "runId")
+        self.owner_id = et.QName(self.uws_namespace, "ownerId")
         self.quote = et.QName(self.uws_namespace, "quote")
-        self.creationTime = et.QName(self.uws_namespace, "creationTime")
-        self.startTime = et.QName(self.uws_namespace, "startTime")
-        self.endTime = et.QName(self.uws_namespace, "endTime")
-        self.executionDuration = et.QName(self.uws_namespace, "executionDuration")
+        self.creation_time = et.QName(self.uws_namespace, "creationTime")
+        self.start_time = et.QName(self.uws_namespace, "startTime")
+        self.end_time = et.QName(self.uws_namespace, "endTime")
+        self.execution_duration = et.QName(self.uws_namespace, "executionDuration")
         self.destruction = et.QName(self.uws_namespace, "destruction")
         self.parameters = et.QName(self.uws_namespace, "parameters")
         self.results = et.QName(self.uws_namespace, "results")
-        self.errorSummary = et.QName(self.uws_namespace, "errorSummary")
+        self.error_summary = et.QName(self.uws_namespace, "errorSummary")
         self.message = et.QName(self.uws_namespace, "message")
-        self.jobInfo = et.QName(self.uws_namespace, "jobInfo")
+        self.job_info = et.QName(self.uws_namespace, "jobInfo")
 
 
 class JobPhases:
@@ -106,10 +106,10 @@ class Jobs(BaseUWSModel):
 
             self.job_reference = []
 
-            for xmlJob in xml_jobs:
-                self.add_job(
-                    job=JobRef(xml_node=xmlJob, xml_namespace=parsed.nsmap, uws_flavour=uws_flavour)
-                )
+            for xml_job in xml_jobs:
+                self.add_job(job=JobRef(xml_node=xml_job,
+                                        xml_namespace=parsed.nsmap,
+                                        uws_flavour=uws_flavour))
         else:
             self.job_reference = []
 
@@ -137,24 +137,24 @@ class JobRef(BaseUWSModel):
                  uws_flavour=None):
         super(JobRef, self).__init__()
 
-        self.id = None
+        self.jid = None
         self.reference = Reference()
         self.phase = []
 
         if xml_node is not None:  # When should this ever be None?????
-            self.id = xml_node.get('id')
+            self.jid = xml_node.get('id')
 
             # UWS standard defines array, therefore treat phase as array
             # (... actually it does not, but keep it anyway like this, maybe at
             # some point in the future all phases of a job are provided as list)
             self.phase = [elm.text for elm in xml_node.findall(uws_flavour.phase)]
             self.reference = Reference(xml_node=xml_node, xml_namespace=xml_namespace)
-            self.runId = xml_node.get('runId')
-            self.ownerId = xml_node.get('ownerId')
-            self.creationTime = xml_node.get('creationTime')
+            self.run_id = xml_node.get('runId')
+            self.owner_id = xml_node.get('ownerId')
+            self.creation_time = xml_node.get('creationTime')
 
         elif jid is not None and phase is not None and reference is not None:
-            self.id = jid
+            self.jid = jid
 
             if isinstance(phase, six.string_types):
                 self.phase = [phase]
@@ -170,12 +170,13 @@ class JobRef(BaseUWSModel):
         self.phase = [new_phase]
 
     def __unicode__(self):
-        if self.creationTime is not None:
-            return "Job '%s' in phase '%s' created at '%s' - %s" % (self.id, ', '.join(self.phase),
-                                                                    self.creationTime,
+        if self.creation_time is not None:
+            return "Job '%s' in phase '%s' created at '%s' - %s" % (self.jid,
+                                                                    ', '.join(self.phase),
+                                                                    self.creation_time,
                                                                     str(self.reference))
         else:
-            return "Job '%s' in phase '%s' - %s" % (self.id, ', '.join(self.phase),
+            return "Job '%s' in phase '%s' - %s" % (self.jid, ', '.join(self.phase),
                                                     str(self.reference))
 
     def __str__(self):
@@ -191,12 +192,12 @@ class Reference(BaseUWSModel):
 
         if xml_node is not None:
             # check that namespace for xlink really exists
-            if xlink_namespace not in xml_namespace.values():
+            if XLINK_NAMESPACE not in xml_namespace.values():
                 raise RuntimeError("No supported xlink namespace found in xml-response, "
                                    "cannot parse xml.")
 
-            qualifiedname_type = et.QName(xlink_namespace, "type")
-            qualifiedname_href = et.QName(xlink_namespace, "href")
+            qualifiedname_type = et.QName(XLINK_NAMESPACE, "type")
+            qualifiedname_href = et.QName(XLINK_NAMESPACE, "href")
             self.type = xml_node.get(qualifiedname_type)
             self.href = xml_node.get(qualifiedname_href)
         elif href is not None and rtype is not None:
@@ -244,16 +245,16 @@ class Job(BaseUWSModel):
             if parsed.get("version"):
                 self.version = parsed.get("version")
 
-            self.job_id = self._get_mandatory(parsed, uws_flavour.jobId)
-            self.run_id = self._get_optional(parsed, uws_flavour.runId)
-            self.owner_id = self._get_optional(parsed, uws_flavour.ownerId)
+            self.job_id = self._get_mandatory(parsed, uws_flavour.job_id)
+            self.run_id = self._get_optional(parsed, uws_flavour.run_id)
+            self.owner_id = self._get_optional(parsed, uws_flavour.owner_id)
             self.phase = [self._get_mandatory(parsed, uws_flavour.phase)]
             self.quote = self._get_optional(parsed, uws_flavour.quote)
-            self.creation_time = self._get_optional(parsed, uws_flavour.creationTime)
-            self.start_time = self._get_mandatory(parsed, uws_flavour.startTime)
-            self.end_time = self._get_mandatory(parsed, uws_flavour.endTime)
+            self.creation_time = self._get_optional(parsed, uws_flavour.creation_time)
+            self.start_time = self._get_mandatory(parsed, uws_flavour.start_time)
+            self.end_time = self._get_mandatory(parsed, uws_flavour.end_time)
             self.execution_duration = int(self._get_mandatory(parsed,
-                                                              uws_flavour.executionDuration))
+                                                              uws_flavour.execution_duration))
             self.destruction = self._get_mandatory(parsed, uws_flavour.destruction)
 
             self.parameters = []
@@ -271,12 +272,12 @@ class Job(BaseUWSModel):
                 self.add_result(result=Result(xml_node=res, xml_namespace=parsed.nsmap))
 
             self.error_summary = False
-            tmp = parsed.find(uws_flavour.errorSummary)
+            tmp = parsed.find(uws_flavour.error_summary)
             if tmp is not None:
                 self.error_summary = ErrorSummary(xml_node=tmp, uws_flavour=uws_flavour)
 
             self.job_info = []
-            tmp = parsed.find(uws_flavour.jobInfo)
+            tmp = parsed.find(uws_flavour.job_info)
             if tmp is not None:
                 self.job_info = list(tmp)
 
@@ -354,24 +355,24 @@ class Parameter(BaseUWSModel):
     def __init__(self, pid=None, by_reference=False, is_post=False, value=None, xml_node=None):
         super(Parameter, self).__init__()
 
-        self.id = None
+        self.pid = None
         self.by_reference = False
         self.is_post = False
         self.value = None
 
         if xml_node is not None:
-            self.id = xml_node.get('id')
+            self.pid = xml_node.get('id')
             self.by_reference = self._parse_bool(xml_node.get('by_reference', default=False))
             self.is_post = self._parse_bool(xml_node.get('is_post', default=False))
             self.value = xml_node.text
         elif pid is not None and value is not None:
-            self.id = pid
+            self.pid = pid
             self.by_reference = by_reference
             self.is_post = is_post
             self.value = value
 
     def __unicode__(self):
-        return "Parameter id '%s' byRef: %s is_post: %s - value: %s" % (self.id, self.by_reference,
+        return "Parameter id '%s' byRef: %s is_post: %s - value: %s" % (self.pid, self.by_reference,
                                                                         self.is_post, self.value)
 
     def __str__(self):
@@ -382,22 +383,22 @@ class Result(BaseUWSModel):
     def __init__(self, rid=None, reference=None, xml_node=None, xml_namespace=None):
         super(Result, self).__init__()
 
-        self.id = None
+        self.rid = None
         self.reference = Reference()
 
         if xml_node is not None:
-            self.id = xml_node.get('id')
+            self.rid = xml_node.get('id')
             self.reference = Reference(xml_node=xml_node, xml_namespace=xml_namespace)
         elif rid is not None and reference is not None:
-            self.id = rid
+            self.rid = rid
 
             if isinstance(reference, Reference):
                 self.reference = reference
             else:
-                raise RuntimeError("Malformated reference given in result id: %s" % id)
+                raise RuntimeError("Malformated reference given in result id: %s" % rid)
 
     def __unicode__(self):
-        return "Result id '%s' reference: %s" % (self.id, str(self.reference))
+        return "Result id '%s' reference: %s" % (self.rid, str(self.reference))
 
     def __str__(self):
         return str(self.__unicode__())

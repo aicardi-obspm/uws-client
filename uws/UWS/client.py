@@ -27,23 +27,23 @@ class Client:
 
         try:
             response = self.connection.get('', params)
-        except Exception as e:
+        except Exception as exc:
             # Do not try to make a second request without parameters here,
             # because cannot call self.connection.get() a second time and reusing the connection
             # without calling a getresponse() or close() or something beforehand.
             # (This would lead to a httplib CannotSendRequest() error!)
             # Let's just raise the error immediately.
-            raise UWSError(str(e))
+            raise UWSError(str(exc))
 
         raw = response.read()
 
         try:
             job_list = models.Jobs(raw)
-        except XMLSyntaxError as e:
+        except XMLSyntaxError as exc:
             raise UWSError("Malformatted response. Are you sure the host you specified is a "
                            "IVOA UWS service?", raw)
-        except Exception as e:
-            raise e
+        except Exception as exc:
+            raise exc
 
         return job_list
 
@@ -129,27 +129,27 @@ class Client:
 
         try:
             response = self.connection.get(jid, params)
-        except Exception as e:
+        except Exception as exc:
             # Do not make a second request without params, throw error
             # immediately
-            raise UWSError(str(e))
+            raise UWSError(str(exc))
 
         raw = response.read()
         try:
             result = models.Job(raw)
-        except XMLSyntaxError as e:
+        except XMLSyntaxError as exc:
             raise UWSError("Malformatted response. Are you sure the host you specified is a "
                            "IVOA UWS service?", raw)
-        except Exception as e:
-            raise e
+        except Exception as exc:
+            raise exc
 
         return result
 
     def get_phase(self, jid):
         try:
             response = self.connection.get(jid + '/phase')
-        except Exception as e:
-            raise UWSError(str(e))
+        except Exception as exc:
+            raise UWSError(str(exc))
 
         raw = response.read()
         result = str(raw, 'utf-8')
@@ -160,17 +160,17 @@ class Client:
         args = args or {}
         try:
             response = self.connection.post('', args)
-        except Exception as e:
-            raise UWSError(str(e))
+        except Exception as exc:
+            raise UWSError(str(exc))
 
         raw = response.read()
         try:
             result = models.Job(raw)
-        except XMLSyntaxError as e:
+        except XMLSyntaxError as exc:
             raise UWSError("Malformatted response. Are you sure the host you specified is a "
                            "IVOA UWS service?", raw)
-        except Exception as e:
-            raise e
+        except Exception as exc:
+            raise exc
 
         return result
 
@@ -178,67 +178,67 @@ class Client:
         args = args or {}
         try:
             response = self.connection.post(jid, args)
-        except Exception as e:
-            raise UWSError(str(e))
+        except Exception as exc:
+            raise UWSError(str(exc))
 
         raw = response.read()
         try:
             result = models.Job(raw)
-        except XMLSyntaxError as e:
+        except XMLSyntaxError as exc:
             raise UWSError("Malformatted response. Are you sure the host you specified is a "
                            "IVOA UWS service?", raw)
-        except Exception as e:
-            raise e
+        except Exception as exc:
+            raise exc
 
         return result
 
     def run_job(self, jid):
         try:
             response = self.connection.post(jid + '/phase', {"PHASE": "RUN"})
-        except Exception as e:
-            raise UWSError(str(e))
+        except Exception as exc:
+            raise UWSError(str(exc))
 
         raw = response.read()
         try:
             result = models.Job(raw)
-        except XMLSyntaxError as e:
+        except XMLSyntaxError as exc:
             raise UWSError("Malformatted response. Are you sure the host you specified is a "
                            "IVOA UWS service?", raw)
-        except Exception as e:
-            raise e
+        except Exception as exc:
+            raise exc
 
         return result
 
     def abort_job(self, jid):
         try:
             response = self.connection.post(jid, {"PHASE": "ABORT"})
-        except Exception as e:
-            raise UWSError(str(e))
+        except Exception as exc:
+            raise UWSError(str(exc))
 
         raw = response.read()
         try:
             result = models.Job(raw)
-        except XMLSyntaxError as e:
+        except XMLSyntaxError as exc:
             raise UWSError("Malformatted response. Are you sure the host you specified is a IVOA "
                            "UWS service?", raw)
-        except Exception as e:
-            raise e
+        except Exception as exc:
+            raise exc
 
         return result
 
     def delete_job(self, jid):
         try:
             response = self.connection.delete(jid)
-        except Exception as e:
-            raise UWSError(str(e))
+        except Exception as exc:
+            raise UWSError(str(exc))
 
         raw = response.read()
         try:
             result = True
-        except XMLSyntaxError as e:
+        except XMLSyntaxError as exc:
             raise UWSError("Malformatted response. Are you sure the host you specified is a IVOA "
                            "UWS service?", raw)
-        except Exception as e:
-            raise e
+        except Exception as exc:
+            raise exc
 
         return result

@@ -5,7 +5,7 @@ from uws import UWS
 
 
 class BaseTest(unittest.TestCase):
-    def testValidateAndParsePhaseFilter(self):
+    def test_validate_and_parse_phase_filter(self):
         filters = {
             'phases': ['COMPLETED', 'PENDING']
         }
@@ -14,7 +14,7 @@ class BaseTest(unittest.TestCase):
 
         self.assertEqual(params, [('PHASE', 'COMPLETED'), ('PHASE', 'PENDING')])
 
-    def testValidateAndParsePhaseFilterInvalidPhase(self):
+    def test_validate_and_parse_phase_filter_invalid_phase(self):
         filters = {
             'phases': ['FOO', 'PENDING']
         }
@@ -25,7 +25,7 @@ class BaseTest(unittest.TestCase):
             filters
         )
 
-    def testValidateAndParseAfterFilter(self):
+    def test_validate_and_parse_after_filter(self):
         filters = {
             'after': '2015-09-10T10:01:02.135'
         }
@@ -34,7 +34,7 @@ class BaseTest(unittest.TestCase):
 
         self.assertEqual(params, [('AFTER', '2015-09-10T10:01:02.135000')])
 
-    def testValidateAndParseAfterFilterInvalidDate(self):
+    def test_validate_and_parse_after_filter_invalid_date(self):
         filters = {
             'after': '2010-4--'
         }
@@ -45,7 +45,7 @@ class BaseTest(unittest.TestCase):
             filters
         )
 
-    def testValidateAndParseAfterFilterTimeZone(self):
+    def test_validate_and_parse_after_filter_time_zone(self):
         filters = {
             'after': '2015-10-03T01:12+2:00'
         }
@@ -56,7 +56,7 @@ class BaseTest(unittest.TestCase):
 
 
 
-    def testValidateAndParseLastFilter(self):
+    def test_validate_and_parse_last_filter(self):
         filters = {
             'last': '1000'
         }
@@ -65,7 +65,7 @@ class BaseTest(unittest.TestCase):
 
         self.assertEqual(params, [('LAST', 1000)])
 
-    def testValidateAndParseLastFilterFloatValue(self):
+    def test_validate_and_parse_last_filter_float_value(self):
         filters = {
             'last': '100.0'
         }
@@ -76,7 +76,7 @@ class BaseTest(unittest.TestCase):
             filters
         )
 
-    def testValidateAndParseLastFilterNegativeValue(self):
+    def test_validate_and_parse_last_filter_negative_value(self):
         filters = {
             'last': '-100'
         }
@@ -87,7 +87,7 @@ class BaseTest(unittest.TestCase):
             filters
         )
 
-    def testValidateAndParseAfterLastFilter(self):
+    def test_validate_and_parse_after_last_filter(self):
         filters = {
             'after': '2015-09-10T10:01:02.135',
             'last': '100'
@@ -98,7 +98,7 @@ class BaseTest(unittest.TestCase):
         self.assertEqual(params, [('AFTER', '2015-09-10T10:01:02.135000'),
                                   ('LAST', 100)])
 
-    def testValidateAndParseAfterLastPhaseFilter(self):
+    def test_validate_and_parse_after_last_phase_filter(self):
         filters = {
             'after': '2015-09-10T10:01:02.135',
             'last': '100',
@@ -110,19 +110,19 @@ class BaseTest(unittest.TestCase):
         self.assertEqual(params, [('PHASE', 'PENDING'), ('PHASE', 'ERROR'),
                                   ('AFTER', '2015-09-10T10:01:02.135000'), ('LAST', 100)])
 
-    def testValidateAndParseWaitNegative(self):
+    def test_validate_and_parse_wait_negative(self):
         wait = '-1'
         params = UWS.client.Client("/")._validate_and_parse_wait(wait)
 
         self.assertEqual(params, [('WAIT', -1)])
 
-    def testValidateAndParseWait(self):
+    def test_validate_and_parse_wait(self):
         wait = '30'
         params = UWS.client.Client("/")._validate_and_parse_wait(wait)
 
         self.assertEqual(params, [('WAIT', 30)])
 
-    def testValidateAndParseWaitInvalidWait(self):
+    def test_validate_and_parse_wait_invalid_wait(self):
         wait = '30.587'
 
         self.assertRaises(
@@ -131,7 +131,7 @@ class BaseTest(unittest.TestCase):
             wait
         )
 
-    def testValidateAndParseWaitInvalidWaitNegative(self):
+    def test_validate_and_parse_wait_invalid_wait_negative(self):
         wait = '-30'
 
         self.assertRaises(
@@ -140,7 +140,7 @@ class BaseTest(unittest.TestCase):
             wait
         )
 
-    def testValidateAndParseWaitPhase(self):
+    def test_validate_and_parse_wait_phase(self):
         wait = '30'
         phase = 'EXECUTING'
 
@@ -148,7 +148,7 @@ class BaseTest(unittest.TestCase):
 
         self.assertEqual(params, [('WAIT', 30), ('PHASE', 'EXECUTING')])
 
-    def testValidateAndParseWaitInvalidPhase(self):
+    def test_validate_and_parse_wait_invalid_phase(self):
         wait = '15'
         phase = 'COMPLETED'
 
