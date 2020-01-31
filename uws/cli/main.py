@@ -163,7 +163,8 @@ def show_phase(url, user_name, password, jid):
 
 
 @handle_error
-def new_job(url, user_name, password, parameters={}, run=False):
+def new_job(url, user_name, password, parameters=None, run=False):
+    parameters = parameters or {}
     uws_client = UWS.client.Client(url=url, user=user_name, password=password)
 
     job = uws_client.new_job(parameters)
@@ -186,7 +187,8 @@ def new_job(url, user_name, password, parameters={}, run=False):
 
 
 @handle_error
-def set_parameters_job(url, user_name, password, jid, parameters={}):
+def set_parameters_job(url, user_name, password, jid, parameters=None):
+    parameters = parameters or {}
     uws_client = UWS.client.Client(url=url, user=user_name, password=password)
 
     if len(parameters) == 0:

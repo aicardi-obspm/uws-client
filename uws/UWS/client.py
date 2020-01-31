@@ -55,14 +55,14 @@ class Client(object):
         last = filters_copy.pop('last', None)
 
         if filters_copy:
-            raise UWSError("Unknown filter properties %s", filters_copy.keys())
+            raise UWSError(f"Unknown filter properties {filters_copy.keys()}")
 
         params = []
 
         if phases:
             for phase in phases:
                 if phase not in models.JobPhases.phases:
-                    raise UWSError("Unknown phase %s in filter", phase)
+                    raise UWSError(f"Unknown phase {phase} in filter")
                 params.append(("PHASE", phase))
 
         if after:
@@ -155,7 +155,8 @@ class Client(object):
 
         return result
 
-    def new_job(self, args={}):
+    def new_job(self, args=None):
+        args = args or {}
         try:
             response = self.connection.post('', args)
         except Exception as e:
@@ -172,7 +173,8 @@ class Client(object):
 
         return result
 
-    def set_parameters_job(self, jid, args={}):
+    def set_parameters_job(self, jid, args=None):
+        args = args or {}
         try:
             response = self.connection.post(jid, args)
         except Exception as e:
