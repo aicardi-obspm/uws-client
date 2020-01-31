@@ -312,7 +312,8 @@ class Job(BaseUWSModel):
         return str(self.__unicode__())
         #  return unicode(self).encode('utf-8')
 
-    def add_parameter(self, pid=None, by_reference=False, is_post=False, value=None, parameter=None):
+    def add_parameter(self, pid=None, by_reference=False, is_post=False, value=None,
+                      parameter=None):
         if not parameter:
             parameter = Parameter(pid=pid, by_reference=by_reference, is_post=is_post, value=value)
 

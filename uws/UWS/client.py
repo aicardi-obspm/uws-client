@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from lxml.etree import XMLSyntaxError as XMLSyntaxError
+from lxml.etree import XMLSyntaxError
 import dateutil.parser
 import pytz
 
