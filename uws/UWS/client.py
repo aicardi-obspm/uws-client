@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
 from lxml.etree import XMLSyntaxError as XMLSyntaxError
+import dateutil.parser
+import pytz
 
 #import connection as UWSConnection
 #import models
@@ -8,9 +11,6 @@ from lxml.etree import XMLSyntaxError as XMLSyntaxError
 from . import connection as UWSConnection
 from . import models
 from .errors import UWSError
-from datetime import datetime
-import dateutil.parser
-import pytz
 
 
 class Client(object):

@@ -2,11 +2,11 @@ import getpass
 import sys
 
 from functools import wraps
-import texttable as tt
 import shutil
+import texttable as tt
 
-from . import cli_parser
 from uws import UWS
+from . import cli_parser
 
 debug = False
 
