@@ -19,7 +19,7 @@ class Connection(object):
             except AttributeError:
                 pass
             auth_string = '%s:%s' % (user, password)
-            self.auth_string = base64.encodestring(auth_string.encode())
+            self.auth_string = base64.encodebytes(auth_string.encode())
             self.headers = {"Authorization":
                             ("Basic %s" %
                              self.auth_string.decode('utf-8')).strip('\n')}
