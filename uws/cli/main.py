@@ -19,7 +19,7 @@ def handle_error(handler):
         except UWS.UWSError as e:
             if not debug:
                 print("An error occurred:\n   %s" % e.msg)
-                return
+                raise
             else:
                 print("An error occurred:\n   %s" % e.msg)
                 print(e.raw)
