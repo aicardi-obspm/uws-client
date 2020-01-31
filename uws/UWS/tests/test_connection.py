@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import unittest
-
+import http.client as httplib
 from uws import UWS
 
 
@@ -21,11 +21,6 @@ class ConnectionTest(unittest.TestCase):
         self.assertDictEqual(connection.headers, {'Authorization': 'Basic YWRtaW46YWRtaW4='})
 
     def testSetURLHTTP(self):
-        try:
-            import httplib
-        except ImportError:
-            import http.client as httplib
-
         connection = UWS.connection.Connection(
             "http://www.example.com/uws/",
             user="admin",
@@ -38,11 +33,6 @@ class ConnectionTest(unittest.TestCase):
         self.assertIsInstance(connection.connection, httplib.HTTPConnection)
 
     def testSetURLHTTPS(self):
-        try:
-            import httplib
-        except ImportError:
-            import http.client as httplib
-
         connection = UWS.connection.Connection(
             "https://www.example.com/uws/",
             user="admin",
