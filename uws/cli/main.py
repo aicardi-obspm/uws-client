@@ -114,23 +114,23 @@ def _register_job_reference_for_table(rows, jobref):
 
     cols = [jobref.id]
 
-    if (jobref.reference.href is not None):
+    if jobref.reference.href is not None:
         href_jobid = jobref.reference.href.rsplit("/", 1)[1]
         if href_jobid != jobref.id:
             # replace id with href_jobid
             cols[0] = href_jobid
 
-    if (jobref.runId is not None):
+    if jobref.runId is not None:
         cols.append(jobref.runId)
     else:
         cols.append('')
 
-    if (jobref.ownerId is not None):
+    if jobref.ownerId is not None:
         cols.append(jobref.ownerId)
     else:
         cols.append('')
 
-    if (jobref.creationTime is not None):
+    if jobref.creationTime is not None:
         cols.append(jobref.creationTime)
     else:
         cols.append('')
@@ -291,15 +291,15 @@ def _print_job(job):
 
     rows.append(["Run id", job.run_id])
 
-    if(job.owner_id):
+    if job.owner_id:
         rows.append(["Owner id", job.owner_id])
 
     rows.append(["Phase", ", ".join(job.phase)])
 
-    if(job.quote):
+    if job.quote:
         rows.append(["Quote", job.quote])
 
-    if(job.creation_time):
+    if job.creation_time:
         rows.append(["Creation time", job.creation_time])
 
     rows.append(["Start time", job.start_time])
@@ -314,7 +314,7 @@ def _print_job(job):
         rows.append(["Result " + result.id, result.reference])
 
     try:
-        if(job.error_summary):
+        if job.error_summary:
             rows.append(["Errors", "; ".join(job.error_summary.messages)])
     except:
         pass
