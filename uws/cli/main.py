@@ -172,7 +172,7 @@ def new_job(url, user_name, password, parameters={}, run=False):
         # execute the job
         job = uws_client.run_job(job.job_id)
 
-    (console_width, console_height) = console.get_terminal_size()
+    (console_width, console_height) = shutil.get_terminal_size()
 
     _print_job(job)
 
@@ -322,7 +322,7 @@ def _print_job(job):
     for info in job.job_info:
         rows.append(["Job info", info])
 
-    (console_width, console_height) = console.get_terminal_size()
+    (console_width, console_height) = shutil.get_terminal_size()
 
     fields = [row[0] for row in rows]
     max_field_len = len(max(fields, key=len))
