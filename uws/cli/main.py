@@ -3,7 +3,7 @@ import sys
 
 from functools import wraps
 import texttable as tt
-from uws.lib.terminalsize import terminalsize as console
+import shutil
 
 from . import cli_parser
 from uws import UWS
@@ -72,7 +72,7 @@ def list_jobs(url, user_name, password, phases, after=None, last=None):
             # add ARCHIVED phase as well for services with version 1.0 that already support this
             if job_phases.ARCHIVED in phases and job_phases.ARCHIVED in job.phase:
                     _register_job_reference_for_table(rows, job)
-    (console_width, console_height) = console.get_terminal_size()
+    (console_width, console_height) = shutil.get_terminal_size()
 
     # Now we have the rows all stored. Check if all columns exist and remove
     # empty columns for a more friendly output.
