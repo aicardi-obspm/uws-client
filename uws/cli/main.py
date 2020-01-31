@@ -52,26 +52,26 @@ def list_jobs(url, user_name, password, phases, after=None, last=None):
             _register_job_reference_for_table(rows, job)
         else:
             if job_phases.COMPLETED in phases and job_phases.COMPLETED in job.phase:
-                    _register_job_reference_for_table(rows, job)
+                _register_job_reference_for_table(rows, job)
             if job_phases.PENDING in phases and job_phases.PENDING in job.phase:
-                    _register_job_reference_for_table(rows, job)
+                _register_job_reference_for_table(rows, job)
             if job_phases.QUEUED in phases and job_phases.QUEUED in job.phase:
-                    _register_job_reference_for_table(rows, job)
+                _register_job_reference_for_table(rows, job)
             if job_phases.EXECUTING in phases and job_phases.EXECUTING in job.phase:
-                    _register_job_reference_for_table(rows, job)
+                _register_job_reference_for_table(rows, job)
             if job_phases.ERROR in phases and job_phases.ERROR in job.phase:
-                    _register_job_reference_for_table(rows, job)
+                _register_job_reference_for_table(rows, job)
             if job_phases.ABORTED in phases and job_phases.ABORTED in job.phase:
-                    _register_job_reference_for_table(rows, job)
+                _register_job_reference_for_table(rows, job)
             if job_phases.UNKNOWN in phases and job_phases.UNKNOWN in job.phase:
-                    _register_job_reference_for_table(rows, job)
+                _register_job_reference_for_table(rows, job)
             if job_phases.HELD in phases and job_phases.HELD in job.phase:
-                    _register_job_reference_for_table(rows, job)
+                _register_job_reference_for_table(rows, job)
             if job_phases.SUSPENDED in phases and job_phases.SUSPENDED in job.phase:
-                    _register_job_reference_for_table(rows, job)
+                _register_job_reference_for_table(rows, job)
             # add ARCHIVED phase as well for services with version 1.0 that already support this
             if job_phases.ARCHIVED in phases and job_phases.ARCHIVED in job.phase:
-                    _register_job_reference_for_table(rows, job)
+                _register_job_reference_for_table(rows, job)
     (console_width, console_height) = shutil.get_terminal_size()
 
     # Now we have the rows all stored. Check if all columns exist and remove
@@ -141,10 +141,10 @@ def _register_job_reference_for_table(rows, jobref):
 
 
 @handle_error
-def show_job(url, user_name, password, id, wait, phase):
+def show_job(url, user_name, password, jid, wait, phase):
     uws_client = UWS.client.Client(url=url, user=user_name, password=password)
 
-    job = uws_client.get_job(id, wait, phase)
+    job = uws_client.get_job(jid, wait, phase)
 
     if wait and job.version != "1.1":
         print("Warning: Wait keyword is (probably) not supported by the server's UWS version " +
@@ -154,10 +154,10 @@ def show_job(url, user_name, password, id, wait, phase):
 
 
 @handle_error
-def show_phase(url, user_name, password, id):
+def show_phase(url, user_name, password, jid):
     uws_client = UWS.client.Client(url=url, user=user_name, password=password)
 
-    phase = uws_client.get_phase(id)
+    phase = uws_client.get_phase(jid)
 
     print(phase)
 
@@ -186,47 +186,47 @@ def new_job(url, user_name, password, parameters={}, run=False):
 
 
 @handle_error
-def set_parameters_job(url, user_name, password, id, parameters={}):
+def set_parameters_job(url, user_name, password, jid, parameters={}):
     uws_client = UWS.client.Client(url=url, user=user_name, password=password)
 
     if len(parameters) == 0:
-        job = uws_client.get_job(id)
+        job = uws_client.get_job(jid)
     else:
-        job = uws_client.set_parameters_job(id, parameters)
+        job = uws_client.set_parameters_job(jid, parameters)
 
     _print_job(job)
 
 
 @handle_error
-def run_job(url, user_name, password, id):
+def run_job(url, user_name, password, jid):
     uws_client = UWS.client.Client(url=url, user=user_name, password=password)
 
-    job = uws_client.run_job(id)
+    job = uws_client.run_job(jid)
 
     _print_job(job)
 
 
 @handle_error
-def abort_job(url, user_name, password, id):
+def abort_job(url, user_name, password, jid):
     uws_client = UWS.client.Client(url=url, user=user_name, password=password)
 
-    job = uws_client.abort_job(id)
+    job = uws_client.abort_job(jid)
 
     _print_job(job)
 
 
 @handle_error
-def delete_job(url, user_name, password, id):
+def delete_job(url, user_name, password, jid):
     uws_client = UWS.client.Client(url=url, user=user_name, password=password)
 
-    success = uws_client.delete_job(id)
+    success = uws_client.delete_job(jid)
 
     if success:
-        print("Job %s successfully deleted!" % (id))
+        print("Job %s successfully deleted!" % (jid))
 
 
 @handle_error
-def results_job(url, user_name, password, id, result_id, user_file_base):
+def results_job(url, user_name, password, jid, result_id, user_file_base):
     def print_progress(total_size, current):
         if total_size:
             sys.stdout.write("\r%d bytes" % current)    # or print >> sys.stdout, "\r%d%%" %i,
@@ -237,7 +237,7 @@ def results_job(url, user_name, password, id, result_id, user_file_base):
 
     uws_client = UWS.client.Client(url=url, user=user_name, password=password)
 
-    job = uws_client.get_job(id)
+    job = uws_client.get_job(jid)
 
     # if there are multiple result sets returned: force user to decide which ones to use?
     # or maybe rather let the service define a standard result? but how?

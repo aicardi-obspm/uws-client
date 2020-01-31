@@ -121,13 +121,13 @@ class Client(object):
 
         return params
 
-    def get_job(self, id, wait=None, phase=None):
+    def get_job(self, jid, wait=None, phase=None):
         params = None
         if wait:
             params = self._validate_and_parse_wait(wait, phase)
 
         try:
-            response = self.connection.get(id, params)
+            response = self.connection.get(jid, params)
         except Exception as e:
             # Do not make a second request without params, throw error
             # immediately
@@ -144,9 +144,9 @@ class Client(object):
 
         return result
 
-    def get_phase(self, id):
+    def get_phase(self, jid):
         try:
-            response = self.connection.get(id + '/phase')
+            response = self.connection.get(jid + '/phase')
         except Exception as e:
             raise UWSError(str(e))
 
@@ -172,9 +172,9 @@ class Client(object):
 
         return result
 
-    def set_parameters_job(self, id, args={}):
+    def set_parameters_job(self, jid, args={}):
         try:
-            response = self.connection.post(id, args)
+            response = self.connection.post(jid, args)
         except Exception as e:
             raise UWSError(str(e))
 
@@ -189,9 +189,9 @@ class Client(object):
 
         return result
 
-    def run_job(self, id):
+    def run_job(self, jid):
         try:
-            response = self.connection.post(id + '/phase', {"PHASE": "RUN"})
+            response = self.connection.post(jid + '/phase', {"PHASE": "RUN"})
         except Exception as e:
             raise UWSError(str(e))
 
@@ -206,9 +206,9 @@ class Client(object):
 
         return result
 
-    def abort_job(self, id):
+    def abort_job(self, jid):
         try:
-            response = self.connection.post(id, {"PHASE": "ABORT"})
+            response = self.connection.post(jid, {"PHASE": "ABORT"})
         except Exception as e:
             raise UWSError(str(e))
 
@@ -223,9 +223,9 @@ class Client(object):
 
         return result
 
-    def delete_job(self, id):
+    def delete_job(self, jid):
         try:
-            response = self.connection.delete(id)
+            response = self.connection.delete(jid)
         except Exception as e:
             raise UWSError(str(e))
 

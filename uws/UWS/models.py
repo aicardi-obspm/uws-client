@@ -122,17 +122,17 @@ class Jobs(BaseUWSModel):
         return str(self.__unicode__())
         #  return unicode(self).encode('utf-8')
 
-    def add_job(self, id=None, href=None, phase=None, job=None):
+    def add_job(self, jid=None, href=None, phase=None, job=None):
         if job is not None:
             self.job_reference.append(job)
         else:
-            reference = Reference(href=href, type="simple")
-            job_reference = JobRef(id=id, phase=phase, reference=reference)
+            reference = Reference(href=href, rtype="simple")
+            job_reference = JobRef(jid=jid, phase=phase, reference=reference)
             self.job_reference.append(job_reference)
 
 
 class JobRef(BaseUWSModel):
-    def __init__(self, id=None, phase=None, reference=None, xml_node=None, xml_namespace=None,
+    def __init__(self, jid=None, phase=None, reference=None, xml_node=None, xml_namespace=None,
                  uws_flavour=None):
         super(JobRef, self).__init__()
 
@@ -152,8 +152,8 @@ class JobRef(BaseUWSModel):
             self.ownerId = xml_node.get('ownerId')
             self.creationTime = xml_node.get('creationTime')
 
-        elif id is not None and phase is not None and reference is not None:
-            self.id = id
+        elif jid is not None and phase is not None and reference is not None:
+            self.id = jid
 
             if isinstance(phase, six.string_types):
                 self.phase = [phase]
@@ -163,7 +163,7 @@ class JobRef(BaseUWSModel):
             if isinstance(reference, Reference):
                 self.reference = reference
             else:
-                raise RuntimeError("Malformated reference given in jobref id: %s" % id)
+                raise RuntimeError("Malformated reference given in jobref id: %s" % jid)
 
     def set_phase(self, new_phase):
         self.phase = [new_phase]
@@ -182,7 +182,7 @@ class JobRef(BaseUWSModel):
 
 
 class Reference(BaseUWSModel):
-    def __init__(self, href=None, type=None, xml_node=None, xml_namespace=None):
+    def __init__(self, href=None, rtype=None, xml_node=None, xml_namespace=None):
         super(Reference, self).__init__()
 
         self.type = "simple"
@@ -198,8 +198,8 @@ class Reference(BaseUWSModel):
             qualifiedname_href = et.QName(xlink_namespace, "href")
             self.type = xml_node.get(qualifiedname_type)
             self.href = xml_node.get(qualifiedname_href)
-        elif href is not None and type is not None:
-            self.type = type
+        elif href is not None and rtype is not None:
+            self.type = rtype
             self.href = href
 
     def __unicode__(self):
@@ -311,16 +311,16 @@ class Job(BaseUWSModel):
         return str(self.__unicode__())
         #  return unicode(self).encode('utf-8')
 
-    def add_parameter(self, id=None, by_reference=False, is_post=False, value=None, parameter=None):
+    def add_parameter(self, pid=None, by_reference=False, is_post=False, value=None, parameter=None):
         if not parameter:
-            parameter = Parameter(id=id, by_reference=by_reference, is_post=is_post, value=value)
+            parameter = Parameter(pid=pid, by_reference=by_reference, is_post=is_post, value=value)
 
         self.parameters.append(parameter)
 
-    def add_result(self, id=None, href=None, result=None):
+    def add_result(self, rid=None, href=None, result=None):
         if not result:
-            reference = Reference(href=href, type="simple")
-            result = Result(id=id, reference=reference)
+            reference = Reference(href=href, rtype="simple")
+            result = Result(rid=rid, reference=reference)
 
         self.results.append(result)
 
@@ -347,7 +347,7 @@ class Job(BaseUWSModel):
 
 
 class Parameter(BaseUWSModel):
-    def __init__(self, id=None, by_reference=False, is_post=False, value=None, xml_node=None):
+    def __init__(self, pid=None, by_reference=False, is_post=False, value=None, xml_node=None):
         super(Parameter, self).__init__()
 
         self.id = None
@@ -360,8 +360,8 @@ class Parameter(BaseUWSModel):
             self.by_reference = self._parse_bool(xml_node.get('by_reference', default=False))
             self.is_post = self._parse_bool(xml_node.get('is_post', default=False))
             self.value = xml_node.text
-        elif id is not None and value is not None:
-            self.id = id
+        elif pid is not None and value is not None:
+            self.id = pid
             self.by_reference = by_reference
             self.is_post = is_post
             self.value = value
@@ -375,7 +375,7 @@ class Parameter(BaseUWSModel):
 
 
 class Result(BaseUWSModel):
-    def __init__(self, id=None, reference=None, xml_node=None, xml_namespace=None):
+    def __init__(self, rid=None, reference=None, xml_node=None, xml_namespace=None):
         super(Result, self).__init__()
 
         self.id = None
@@ -384,8 +384,8 @@ class Result(BaseUWSModel):
         if xml_node is not None:
             self.id = xml_node.get('id')
             self.reference = Reference(xml_node=xml_node, xml_namespace=xml_namespace)
-        elif id is not None and reference is not None:
-            self.id = id
+        elif rid is not None and reference is not None:
+            self.id = rid
 
             if isinstance(reference, Reference):
                 self.reference = reference
@@ -400,7 +400,7 @@ class Result(BaseUWSModel):
 
 
 class ErrorSummary(BaseUWSModel):
-    def __init__(self, type="transient", has_detail=False, messages=None,
+    def __init__(self, etype="transient", has_detail=False, messages=None,
                  xml_node=None, uws_flavour=None):
         super(ErrorSummary, self).__init__()
 
@@ -419,7 +419,7 @@ class ErrorSummary(BaseUWSModel):
                 self.messages.append(message.text)
 
         elif messages is not None:
-            self.type = type
+            self.type = etype
             self.has_detail = has_detail
             self.messages = messages
 
