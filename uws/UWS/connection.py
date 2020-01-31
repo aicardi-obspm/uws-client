@@ -1,16 +1,8 @@
 # -*- coding: utf-8 -*-
-try:
-    import httplib
-except ImportError:
-    import http.client as httplib
-try:
-    import urllib2
-    import urllib
-    from urlparse import urlparse
-except ImportError:
-    import urllib.request as urllib2
-    import urllib.parse as urllib
-    from urllib.parse import urlparse
+import http.client as httplib
+import urllib.request as urllib2
+import urllib.parse as urllib
+from urllib.parse import urlparse
 import base64
 import mimetypes
 import re
@@ -21,7 +13,7 @@ class Connection(object):
         self._set_url(url)
 
         if user is not None and password is not None:
-            try: 
+            try:
                 user = user.decode('utf-8')
                 password = password.decode('utf-8')
             except AttributeError:
@@ -30,7 +22,7 @@ class Connection(object):
             self.auth_string = base64.encodestring(auth_string.encode())
             self.headers = {"Authorization":
                             ("Basic %s" %
-                                self.auth_string.decode('utf-8')).strip('\n')}
+                             self.auth_string.decode('utf-8')).strip('\n')}
         else:
             self.headers = {}
 
@@ -94,7 +86,8 @@ class Connection(object):
             raise RuntimeError('Resource does not exist')
 
         if response.status != 200:
-            raise RuntimeError('Error with connection to server: Got response: %s %s' % (response.status, response.reason))
+            raise RuntimeError('Error with connection to server: ' +
+                               'Got response: %s %s' % (response.status, response.reason))
 
         return response
 
@@ -163,7 +156,8 @@ class Connection(object):
             raise RuntimeError('Resource does not exist')
 
         if response.status != 200:
-            raise RuntimeError('Error with connection to server: Got response: %s %s' % (response.status, response.reason))
+            raise RuntimeError('Error with connection to server: ' +
+                               'Got response: %s %s' % (response.status, response.reason))
 
         return response
 
@@ -204,7 +198,8 @@ class Connection(object):
             raise RuntimeError('Resource does not exist')
 
         if response.status != 200:
-            raise RuntimeError('Error with connection to server: Got response: %s %s' % (response.status, response.reason))
+            raise RuntimeError('Error with connection to server: ' +
+                               'Got response: %s %s' % (response.status, response.reason))
 
         return response
 

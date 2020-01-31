@@ -96,7 +96,7 @@ class BaseTest(unittest.TestCase):
         params = UWS.client.Client("/")._validate_and_parse_filters(filters)
 
         self.assertEqual(params, [('AFTER','2015-09-10T10:01:02.135000'),
-            ('LAST', 100)])
+                                  ('LAST', 100)])
 
     def testValidateAndParseAfterLastPhaseFilter(self):
         filters = {
@@ -108,7 +108,7 @@ class BaseTest(unittest.TestCase):
         params = UWS.client.Client("/")._validate_and_parse_filters(filters)
 
         self.assertEqual(params, [ ('PHASE','PENDING'), ('PHASE','ERROR'),
-            ('AFTER','2015-09-10T10:01:02.135000'), ('LAST', 100)])
+                                   ('AFTER','2015-09-10T10:01:02.135000'), ('LAST', 100)])
 
     def testValidateAndParseWaitNegative(self):
         wait = '-1'

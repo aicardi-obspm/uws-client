@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 
+import six
 from lxml import etree as et
+
 
 uws_1_namespace = "http://www.ivoa.net/xml/UWS/v1.0"
 #uws_2_namespace = "http://www.ivoa.net/xml/UWS/v2.0"
@@ -151,7 +153,7 @@ class JobRef(BaseUWSModel):
         elif id is not None and phase is not None and reference is not None:
             self.id = id
 
-            if isinstance(phase, basestring):
+            if isinstance(phase, six.string_types):
                 self.phase = [phase]
             else:
                 self.phase = phase

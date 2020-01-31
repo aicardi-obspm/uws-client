@@ -147,7 +147,8 @@ def show_job(url, user_name, password, id, wait, phase):
     job = uws_client.get_job(id, wait, phase)
 
     if wait and job.version != "1.1":
-        print("Warning: Wait keyword is (probably) not supported by the server's UWS version %s (need 1.1). Server will probably ignore wait and return immediately." % job.version)
+        print("Warning: Wait keyword is (probably) not supported by the server's UWS version " +
+              f"{job.version} (need 1.1). Server will probably ignore wait and return immediately.")
 
     _print_job(job)
 
@@ -178,8 +179,9 @@ def new_job(url, user_name, password, parameters={}, run=False):
     print("\n")
     print("*" * (console_width - 1))
     print("You can access this job with the id:\n")
-    print("Job ID: %s" % job.job_id)
-    print("Command: uws -H %s --user %s --password YOUR_PASSWORD_HERE job show %s" % (url, user_name, job.job_id))
+    print(f"Job ID: {job.job_id}")
+    print(f"Command: uws -H {url} --user {user_name} --password YOUR_PASSWORD_HERE" +
+          f"job show {job.job_id}")
     print("*" * (console_width - 1))
 
 
@@ -230,7 +232,7 @@ def results_job(url, user_name, password, id, result_id, user_file_base):
             sys.stdout.write("\r%d bytes" % current)    # or print >> sys.stdout, "\r%d%%" %i,
             sys.stdout.flush()
         else:
-            sys.stdout.write("\rDownloaded %d bytes" % current)    # or print >> sys.stdout, "\r%d%%" %i,
+            sys.stdout.write(f"\rDownloaded {current} bytes") # or print >> sys.stdout, "\r%d%%" %i,
             sys.stdout.flush()
 
     uws_client = UWS.client.Client(url=url, user=user_name, password=password)
@@ -241,9 +243,11 @@ def results_job(url, user_name, password, id, result_id, user_file_base):
     # or maybe rather let the service define a standard result? but how?
     if len(job.results) > 1 and not result_id:
         print('There are multiple results for this job, all of them are downloaded now.')
-        print('If this is not what you intended, please specify the id of your desired result like this: ')
+        print('If this is not what you intended, please specify the id of your desired', end='')
+        print(' result like this: ')
         print('\nuws job results ID RESULTID\n')
-        print('For RESULTID, you can choose from: ', ','.join([result.id for result in job.results]))
+        print('For RESULTID, you can choose from: ',
+              ','.join([result.id for result in job.results]))
 
     # set file base name to job_id or tablename (if available) or user provided file_base
     file_base = job.job_id
@@ -264,17 +268,20 @@ def results_job(url, user_name, password, id, result_id, user_file_base):
             url = str(result.reference)
 
             print("Downloading %s into file '%s'" % (result.id, filename))
-            uws_client.connection.download_file(url, user_name, password, filename, callback=print_progress)
+            uws_client.connection.download_file(url, user_name, password,
+                                                filename, callback=print_progress)
             print("")
             print("Finished downloading file '%s'\n" % (filename))
             retrieved = True
 
     if not retrieved:
         if result_id:
-            print("Result Id '%s' not available. Use 'uws job show %s' for a list of available results." % (result_id, job.job_id))
+            print(f"Result Id '{result_id}' not available. ", end="")
+            print(f"Use 'uws job show {job.job_id}' for a list of available results.")
         else:
-            print("The job with id '%s' has no results." % (job.job_id))
-            print("Check with 'uws job show %s' the details, the job results may have been deleted." % (job.job_id))
+            print(f"The job with id '{job.job_id}' has no results.")
+            print(f"Check with 'uws job show {job.job_id}' the details, ", end="")
+            print("the job results may have been deleted.")
 
 
 def _print_job(job):
@@ -283,7 +290,7 @@ def _print_job(job):
     rows.append(["Job id", job.job_id])
 
     rows.append(["Run id", job.run_id])
-    
+
     if(job.owner_id):
         rows.append(["Owner id", job.owner_id])
 
@@ -291,7 +298,7 @@ def _print_job(job):
 
     if(job.quote):
         rows.append(["Quote", job.quote])
-    
+
     if(job.creation_time):
         rows.append(["Creation time", job.creation_time])
 
@@ -335,14 +342,16 @@ def _check_job_wait_args(arguments):
     phase = arguments.phase
 
     if wait is None and phase is not None:
-        raise RuntimeError("Additional phase for 'job show' only allowed in combination with 'wait'-keyword.")
+        raise RuntimeError("Additional phase for 'job show' only allowed in combination with" +
+                           "'wait'-keyword.")
 
     if phase:
         if phase.upper() in UWS.models.JobPhases.active_phases:
             phase = phase.upper()
         else:
             active_phases = ', '.join(UWS.models.JobPhases.active_phases)
-            raise RuntimeError("Phase '" + phase + "' is not supported with WAIT keyword, choose one of the active phases: " + active_phases)
+            raise RuntimeError("Phase '" + phase + "' is not supported with WAIT keyword, " +
+                               "choose one of the active phases: " + active_phases)
 
     return wait, phase
 
@@ -440,12 +449,14 @@ def main():
             # parse the job parameters and store in argument list
             job_parameters = _check_job_parameter_args(arguments.job_parameters)
 
-            new_job(arguments.host, arguments.user, arguments.password, job_parameters, arguments.run)
+            new_job(arguments.host, arguments.user, arguments.password,
+                    job_parameters, arguments.run)
         elif arguments.job_command == "set":
             # parse the job parameters and store in argument list
             job_parameters = _check_job_parameter_args(arguments.job_parameters)
 
-            set_parameters_job(arguments.host, arguments.user, arguments.password, arguments.id, job_parameters)
+            set_parameters_job(arguments.host, arguments.user, arguments.password,
+                               arguments.id, job_parameters)
         elif arguments.job_command == "run":
             run_job(arguments.host, arguments.user, arguments.password, arguments.id)
         elif arguments.job_command == "abort":
@@ -453,7 +464,8 @@ def main():
         elif arguments.job_command == "delete":
             delete_job(arguments.host, arguments.user, arguments.password, arguments.id)
         elif arguments.job_command == "results":
-            results_job(arguments.host, arguments.user, arguments.password, arguments.id, arguments.result_id, arguments.file_base)
+            results_job(arguments.host, arguments.user, arguments.password, arguments.id,
+                        arguments.result_id, arguments.file_base)
         else:
             print("Error: Unknown command %s\n" % (arguments.job_command))
 
