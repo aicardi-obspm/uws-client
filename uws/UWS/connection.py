@@ -8,7 +8,7 @@ import mimetypes
 import re
 
 
-class Connection(object):
+class Connection:
     def __init__(self, url, user=None, password=None):
         self._set_url(url)
 

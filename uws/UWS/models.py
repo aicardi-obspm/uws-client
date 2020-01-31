@@ -10,7 +10,7 @@ uws_1_namespace = "http://www.ivoa.net/xml/UWS/v1.0"
 xlink_namespace = "http://www.w3.org/1999/xlink"
 
 
-class UWS1Flavour(object):
+class UWS1Flavour:
     def __init__(self, namespaces=None):
 
         if uws_1_namespace not in namespaces.values():
@@ -39,7 +39,7 @@ class UWS1Flavour(object):
         self.jobInfo = et.QName(self.uws_namespace, "jobInfo")
 
 
-class JobPhases(object):
+class JobPhases:
     COMPLETED = 'COMPLETED'
     PENDING = 'PENDING'
     QUEUED = 'QUEUED'
@@ -72,7 +72,7 @@ class JobPhases(object):
     }
 
 
-class BaseUWSModel(object):
+class BaseUWSModel:
     def __init__(self):
         self.version = "1.0"
 

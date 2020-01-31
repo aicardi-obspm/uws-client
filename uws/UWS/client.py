@@ -12,7 +12,7 @@ from . import models
 from .errors import UWSError
 
 
-class Client(object):
+class Client:
     def __init__(self, url=None, user=None, password=None, connection=None):
         if connection:
             self.connection = connection
