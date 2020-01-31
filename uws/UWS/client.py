@@ -41,7 +41,8 @@ class Client(object):
         try:
             job_list = models.Jobs(raw)
         except XMLSyntaxError as e:
-            raise UWSError("Malformatted response. Are you sure the host you specified is a IVOA UWS service?", raw)
+            raise UWSError("Malformatted response. Are you sure the host you specified is a "
+                           "IVOA UWS service?", raw)
         except Exception as e:
             raise e
 
@@ -66,7 +67,8 @@ class Client(object):
 
         if after:
             # TODO: Allow to provide local time and convert here to UTC?
-            # TODO: We may encounter more troubles with microseconds, if ',' used instead of '.'(e.g. German systems)
+            # TODO: We may encounter more troubles with microseconds, 
+            #       if ',' used instead of '.'(e.g. German systems)
 
             try:
                 date = dateutil.parser.parse(after)
@@ -74,10 +76,12 @@ class Client(object):
                 # given (e.g. '2010-09'->'2010-09-06').
                 # Let's tell the user how the given value was interpreted:
                 if str(date) != str(after):
-                    print("Note: Changed value for keyword 'after' from '%s' to '%s'." % (after, str(date)))
+                    print(f"Note: Changed value for keyword 'after' from '{after}' "
+                          f"to '{str(date)}'.")
 
             except:
-                raise UWSError("Date time format could not be parsed, expecting UTC in ISO 8601:2004 format or compatible: %s" % (str(after)))
+                raise UWSError("Date time format could not be parsed, expecting UTC in "
+                               "ISO 8601:2004 format or compatible: %s" % (str(after)))
 
             # Convert from given time (with attached timezone information) to UTC time
             if date.utcoffset() is not None:
@@ -92,10 +96,10 @@ class Client(object):
             try:
                 last = int(last)
             except:
-                raise UWSError("Value for 'last' argument must be a positive integer: %s" % (str(last)))
+                raise UWSError(f"Value for 'last' argument must be a positive integer: {str(last)}")
 
             if last < 1:
-                raise UWSError("Value for 'last' argument must be a positive integer: %s" % (str(last)))
+                raise UWSError(f"Value for 'last' argument must be a positive integer: {str(last)}")
             params.append(("LAST", last))
 
         return params
@@ -111,7 +115,8 @@ class Client(object):
 
         if phase:
             if phase not in models.JobPhases.active_phases:
-                raise UWSError("Given phase '%s' is not an active phase, 'wait' with this phase is not supported." % phase)
+                raise UWSError(f"Given phase '{phase}' is not an active phase, "
+                               "'wait' with this phase is not supported.")
             params.append(("PHASE", phase))
 
         return params
@@ -132,7 +137,8 @@ class Client(object):
         try:
             result = models.Job(raw)
         except XMLSyntaxError as e:
-            raise UWSError("Malformatted response. Are you sure the host you specified is a IVOA UWS service?", raw)
+            raise UWSError("Malformatted response. Are you sure the host you specified is a "
+                           "IVOA UWS service?", raw)
         except Exception as e:
             raise e
 
@@ -159,7 +165,8 @@ class Client(object):
         try:
             result = models.Job(raw)
         except XMLSyntaxError as e:
-            raise UWSError("Malformatted response. Are you sure the host you specified is a IVOA UWS service?", raw)
+            raise UWSError("Malformatted response. Are you sure the host you specified is a "
+                           "IVOA UWS service?", raw)
         except Exception as e:
             raise
 
@@ -175,7 +182,8 @@ class Client(object):
         try:
             result = models.Job(raw)
         except XMLSyntaxError as e:
-            raise UWSError("Malformatted response. Are you sure the host you specified is a IVOA UWS service?", raw)
+            raise UWSError("Malformatted response. Are you sure the host you specified is a "
+                           "IVOA UWS service?", raw)
         except Exception as e:
             raise e
 
@@ -191,7 +199,8 @@ class Client(object):
         try:
             result = models.Job(raw)
         except XMLSyntaxError as e:
-            raise UWSError("Malformatted response. Are you sure the host you specified is a IVOA UWS service?", raw)
+            raise UWSError("Malformatted response. Are you sure the host you specified is a "
+                           "IVOA UWS service?", raw)
         except Exception as e:
             raise e
 
@@ -207,7 +216,8 @@ class Client(object):
         try:
             result = models.Job(raw)
         except XMLSyntaxError as e:
-            raise UWSError("Malformatted response. Are you sure the host you specified is a IVOA UWS service?", raw)
+            raise UWSError("Malformatted response. Are you sure the host you specified is a IVOA "
+                           "UWS service?", raw)
         except Exception as e:
             raise e
 
@@ -223,7 +233,8 @@ class Client(object):
         try:
             result = True
         except XMLSyntaxError as e:
-            raise UWSError("Malformatted response. Are you sure the host you specified is a IVOA UWS service?", raw)
+            raise UWSError("Malformatted response. Are you sure the host you specified is a IVOA "
+                           "UWS service?", raw)
         except Exception as e:
             raise e
 

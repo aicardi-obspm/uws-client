@@ -14,7 +14,8 @@ class UWS1Flavour(object):
     def __init__(self, namespaces=None):
 
         if uws_1_namespace not in namespaces.values():
-            raise RuntimeError("No supported UWS namespace found in xml-response, cannot parse xml.")
+            raise RuntimeError("No supported UWS namespace found in xml-response, "
+                               "cannot parse xml.")
 
         # prepend each element's name with the correct uws-namespace
         # for this version
@@ -131,7 +132,8 @@ class Jobs(BaseUWSModel):
 
 
 class JobRef(BaseUWSModel):
-    def __init__(self, id=None, phase=None, reference=None, xml_node=None, xml_namespace=None, uws_flavour=None):
+    def __init__(self, id=None, phase=None, reference=None, xml_node=None, xml_namespace=None,
+                 uws_flavour=None):
         super(JobRef, self).__init__()
 
         self.id = None
@@ -168,9 +170,12 @@ class JobRef(BaseUWSModel):
 
     def __unicode__(self):
         if self.creationTime is not None:
-            return "Job '%s' in phase '%s' created at '%s' - %s" % (self.id, ', '.join(self.phase), self.creationTime, str(self.reference))
+            return "Job '%s' in phase '%s' created at '%s' - %s" % (self.id, ', '.join(self.phase),
+                                                                    self.creationTime,
+                                                                    str(self.reference))
         else:
-            return "Job '%s' in phase '%s' - %s" % (self.id, ', '.join(self.phase), str(self.reference))
+            return "Job '%s' in phase '%s' - %s" % (self.id, ', '.join(self.phase),
+                                                    str(self.reference))
 
     def __str__(self):
         return str(self.__unicode__())
@@ -186,7 +191,8 @@ class Reference(BaseUWSModel):
         if xml_node is not None:
             # check that namespace for xlink really exists
             if xlink_namespace not in xml_namespace.values():
-                raise RuntimeError("No supported xlink namespace found in xml-response, cannot parse xml.")
+                raise RuntimeError("No supported xlink namespace found in xml-response, "
+                                   "cannot parse xml.")
 
             qualifiedname_type = et.QName(xlink_namespace, "type")
             qualifiedname_href = et.QName(xlink_namespace, "href")
@@ -245,7 +251,8 @@ class Job(BaseUWSModel):
             self.creation_time = self._get_optional(parsed, uws_flavour.creationTime)
             self.start_time    = self._get_mandatory(parsed, uws_flavour.startTime)
             self.end_time      = self._get_mandatory(parsed, uws_flavour.endTime)
-            self.execution_duration = int(self._get_mandatory(parsed, uws_flavour.executionDuration))
+            self.execution_duration = int(self._get_mandatory(parsed,
+                                                              uws_flavour.executionDuration))
             self.destruction   = self._get_mandatory(parsed, uws_flavour.destruction)
 
             self.parameters = []
@@ -333,7 +340,8 @@ class Job(BaseUWSModel):
 
         element = parsed.find(element_name)
         if element is None:
-            raise RuntimeError("Mandatory element ", element_name.text, " could not be found in xml-response.")
+            raise RuntimeError("Mandatory element ", element_name.text,
+                               " could not be found in xml-response.")
         else:
             return element.text
 
@@ -359,7 +367,8 @@ class Parameter(BaseUWSModel):
             self.value = value
 
     def __unicode__(self):
-        return "Parameter id '%s' byRef: %s is_post: %s - value: %s" % (self.id, self.by_reference, self.is_post, self.value)
+        return "Parameter id '%s' byRef: %s is_post: %s - value: %s" % (self.id, self.by_reference,
+                                                                        self.is_post, self.value)
 
     def __str__(self):
         return str(self.__unicode__())
@@ -415,7 +424,9 @@ class ErrorSummary(BaseUWSModel):
             self.messages = messages
 
     def __unicode__(self):
-        return "Error Summary - type '%s' hasDetail: %s - message: %s" % (self.type, self.has_detail, "\n".join(self.messages))
+        return "Error Summary - type '%s' hasDetail: %s - message: %s" % (self.type,
+                                                                          self.has_detail,
+                                                                          "\n".join(self.messages))
 
     def __str__(self):
         return str(self.__unicode__())
