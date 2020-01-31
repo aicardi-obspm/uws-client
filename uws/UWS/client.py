@@ -47,7 +47,8 @@ class Client:
 
         return job_list
 
-    def _validate_and_parse_filters(self, filters):
+    @staticmethod
+    def _validate_and_parse_filters(filters):
         filters_copy = filters.copy()
         phases = filters_copy.pop('phases', None)
         after = filters_copy.pop('after', None)
@@ -103,7 +104,8 @@ class Client:
 
         return params
 
-    def _validate_and_parse_wait(self, wait, phase=None):
+    @staticmethod
+    def _validate_and_parse_wait(wait, phase=None):
         # wait must be positive integer or -1
         if wait.isdigit() or wait == '-1':
             duration = int(wait)

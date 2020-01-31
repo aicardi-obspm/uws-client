@@ -76,7 +76,8 @@ class BaseUWSModel:
     def __init__(self):
         self.version = "1.0"
 
-    def _parse_bool(self, value):
+    @staticmethod
+    def _parse_bool(value):
         if isinstance(value, str):
             if value.lower() == 'true':
                 return True
@@ -324,7 +325,8 @@ class Job(BaseUWSModel):
 
         self.results.append(result)
 
-    def _get_optional(self, parsed, element_name):
+    @staticmethod
+    def _get_optional(parsed, element_name):
         """Returns the text value of element_name within the parsed elementTree.
 
         If element_name doesn't exist, return None.
@@ -335,7 +337,8 @@ class Job(BaseUWSModel):
         else:
             return option.text
 
-    def _get_mandatory(self, parsed, element_name):
+    @staticmethod
+    def _get_mandatory(parsed, element_name):
         """Check if the element exists, return text or error"""
 
         element = parsed.find(element_name)
