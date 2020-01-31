@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
 from lxml.etree import XMLSyntaxError as XMLSyntaxError
 import dateutil.parser
 import pytz
@@ -169,7 +168,7 @@ class Client(object):
             raise UWSError("Malformatted response. Are you sure the host you specified is a "
                            "IVOA UWS service?", raw)
         except Exception as e:
-            raise
+            raise e
 
         return result
 
