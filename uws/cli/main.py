@@ -91,7 +91,7 @@ def list_jobs(url, user_name, password, phases, after=None, last=None):
     dtypes = ['t']*ncols
 
     # remove empty cols (in-place removal)
-    rows[:] = [ [ col for i, col in enumerate(row) if existing_col[i] == 1 ] for row in rows ]
+    rows[:] = [[col for i, col in enumerate(row) if existing_col[i] == 1] for row in rows]
 
     table = tt.Texttable(max_width=console_width)
     table.set_deco(tt.Texttable.HEADER)

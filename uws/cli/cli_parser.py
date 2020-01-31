@@ -30,7 +30,7 @@ def build_list_argparse(subparsers):
     parser_list.add_argument('--unknown', action='store_true', help='show unknown state jobs')
     parser_list.add_argument('--held', action='store_true', help='show held jobs')
     parser_list.add_argument('--suspended', action='store_true', help='show suspended jobs')
-    parser_list.add_argument('--after', action='store', 
+    parser_list.add_argument('--after', action='store',
                              help=('[UWS1.1] show only jobs started after given UTC time or '
                                    'local time + timezone')
                             )

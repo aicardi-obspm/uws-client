@@ -564,4 +564,3 @@ ORDER BY log_mass
   </results>
 </job>
         '''[1:]
-

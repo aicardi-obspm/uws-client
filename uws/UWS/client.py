@@ -67,7 +67,7 @@ class Client(object):
 
         if after:
             # TODO: Allow to provide local time and convert here to UTC?
-            # TODO: We may encounter more troubles with microseconds, 
+            # TODO: We may encounter more troubles with microseconds,
             #       if ',' used instead of '.'(e.g. German systems)
 
             try:

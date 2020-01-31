@@ -243,17 +243,17 @@ class Job(BaseUWSModel):
             if parsed.get("version"):
                 self.version = parsed.get("version")
 
-            self.job_id        = self._get_mandatory(parsed, uws_flavour.jobId)
-            self.run_id        = self._get_optional(parsed, uws_flavour.runId)
-            self.owner_id      = self._get_optional(parsed, uws_flavour.ownerId)
-            self.phase         = [self._get_mandatory(parsed, uws_flavour.phase)]
-            self.quote         = self._get_optional(parsed, uws_flavour.quote)
+            self.job_id = self._get_mandatory(parsed, uws_flavour.jobId)
+            self.run_id = self._get_optional(parsed, uws_flavour.runId)
+            self.owner_id = self._get_optional(parsed, uws_flavour.ownerId)
+            self.phase = [self._get_mandatory(parsed, uws_flavour.phase)]
+            self.quote = self._get_optional(parsed, uws_flavour.quote)
             self.creation_time = self._get_optional(parsed, uws_flavour.creationTime)
-            self.start_time    = self._get_mandatory(parsed, uws_flavour.startTime)
-            self.end_time      = self._get_mandatory(parsed, uws_flavour.endTime)
+            self.start_time = self._get_mandatory(parsed, uws_flavour.startTime)
+            self.end_time = self._get_mandatory(parsed, uws_flavour.endTime)
             self.execution_duration = int(self._get_mandatory(parsed,
                                                               uws_flavour.executionDuration))
-            self.destruction   = self._get_mandatory(parsed, uws_flavour.destruction)
+            self.destruction = self._get_mandatory(parsed, uws_flavour.destruction)
 
             self.parameters = []
             tmp = parsed.find(uws_flavour.parameters)
